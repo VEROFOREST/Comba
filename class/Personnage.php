@@ -1,13 +1,16 @@
 <?php
 
+include "./config/autoload.php";
+
 class Personnage
 {
-  private $degats,
-          $id,
-          $nom,
-          $xp ,
-          $level ,
-          $strength ;
+  protected $degats,
+            $id,
+            $nom,
+            $niveau,
+            $experience,
+            $strength;
+            
   
   const CEST_MOI = 1; // Constante renvoyée par la méthode `frapper` si on se frappe soi-même.
   const PERSONNAGE_TUE = 2; // Constante renvoyée par la méthode `frapper` si on a tué le personnage en le frappant.
@@ -17,6 +20,7 @@ class Personnage
   public function __construct(array $donnees)
   {
     $this->hydrate($donnees);
+    $this->type = strtolower(static::class);
   }
   
   public function frapper(Personnage $perso)
@@ -25,8 +29,8 @@ class Personnage
     {
       return self::CEST_MOI;
     }
-
-    $this->xp += 25;
+    // $force = $this->strength();
+    $this->experience += 25;
     // On indique au personnage qu'il doit recevoir des dégâts.
     // Puis on retourne la valeur renvoyée par la méthode : self::PERSONNAGE_TUE ou self::PERSONNAGE_FRAPPE
     return $perso->recevoirDegats();
@@ -47,7 +51,7 @@ class Personnage
   
   public function recevoirDegats()
   {
-    $this->degats +=5 ;
+    $this->degats += 5;
     
     // Si on a 100 de dégâts ou plus, on dit que le personnage a été tué.
     if($this->degats >= 100)
@@ -75,21 +79,20 @@ class Personnage
   {
     return $this->nom;
   }
-
-  public function xp()
+  public function niveau()
   {
-    return $this->xp;
+    return $this->niveau;
   }
-
-  public function level()
+  public function experience()
   {
-    return $this->level;
+    return $this->experience;
   }
-
   public function strength()
   {
     return $this->strength;
   }
+  
+  
   
   public function setDegats($degats)
   {
@@ -118,27 +121,28 @@ class Personnage
       $this->nom = $nom;
     }
   }
+
+  public function setNiveau($niveau)
+  {
+      $this->niveau += $niveau;
+  }
+
+  public function setExperience($experience)
+  {
+      $this->experience = $experience;
+  }
+
+  public function setStrength($strength)
+  {
+      $this->strength = $strength;
+    
+  }
+
   public function nomValide()
   {
       if($this->nom != "") {
           return true;
       }
   }
-
-  public function setXp($xp)
-  {
-    $this->xp = $xp;
-  }
-
-  public function setLevel($level)
-  {
-    $this->level = $this->level + $level;
-    
-  }
-
-  public function setStrength($strength)
-  {
-    $this->strength =  $strength;
-    
-  }
+  
 }

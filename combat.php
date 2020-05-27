@@ -1,5 +1,11 @@
 <?php
 
+// require "class/Archer.php";
+// require "class/Magicien.php";
+// require "class/Guerrier.php";
+
+// include "./config/autoload.php";
+
 $manager = new PersonnagesManager($db);
 
 // Si la session perso existe, on restaure l'objet.
@@ -10,7 +16,25 @@ if (isset($_SESSION['perso'])) {
 // Si on a voulu créer un personnage.
 if (isset($_POST['creer']) && isset($_POST['nom'])) {
   // On crée un nouveau personnage.
-  $perso = new Personnage(['nom' => $_POST['nom']]); 
+    switch ($_POST['type'])
+    {
+      case 'magicien' :
+        $perso = new Magicien(['nom' => $_POST['nom']] );
+        // var_dump($perso);
+        break;
+      
+      case 'guerrier' :
+        $perso = new Guerrier(['nom' => $_POST['nom']]);
+        break;
+
+      case 'archer' :
+        $perso = new Archer(['nom' => $_POST['nom']]);
+        break;
+      
+      default :
+        $message = 'Le type du personnage est invalide.';
+        break;
+    }
   // Si le nom est invalide (string vide) on revoit une erreur
   if (!$perso->nomValide()) {
     $message = 'Le nom choisi est invalide.';
@@ -54,6 +78,7 @@ elseif (isset($_GET['frapper'])) {
       
       // On stocke dans $retour les éventuelles erreurs ou messages que renvoie la méthode frapper.
       $retour = $perso->frapper($persoAFrapper); 
+      // var_export($retour);
 
       switch ($retour) {
         case Personnage::CEST_MOI :
@@ -64,7 +89,6 @@ elseif (isset($_GET['frapper'])) {
           $message = 'Le personnage a bien été frappé !';
           
           $manager->update($perso);
-          
           $manager->update($persoAFrapper, $perso->strength());
           
           break;
