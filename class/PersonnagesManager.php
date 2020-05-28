@@ -1,7 +1,4 @@
 <?php
-
-
-
 class PersonnagesManager
 {
   private $db; // Instance de PDO
@@ -13,7 +10,7 @@ class PersonnagesManager
   
   public function add($perso)
   {
-    var_dump($perso->type());
+    // var_dump($perso->type());
     $q = $this->db->prepare('INSERT INTO personnages(nom, type) VALUES(:nom, :type)');
     $q->bindValue(':nom', $perso->nom());
     $q->bindValue(':type', $perso->type());
@@ -25,7 +22,6 @@ class PersonnagesManager
       'niveau' => 0,
       'experience' => 0,
       'strength' => 0,
-      'type' => $perso->type(),
     ]);
   }
   
@@ -74,8 +70,7 @@ class PersonnagesManager
         case 'archer' :
           return new Archer($donnees);
           break;
-        
-        
+
       }
       
     }
@@ -106,34 +101,31 @@ class PersonnagesManager
   
   public function getList($nom)
   {
+
     $persos = [];
-    
+
     $q = $this->db->prepare('SELECT id, nom, degats, niveau, experience, strength, type FROM personnages WHERE nom <> :nom ORDER BY nom');
     $q->execute([':nom' => $nom]);
-    
-    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
-    // var_dump($donnees);
-    {
-        switch ($donnees['type'])
+    $donnees = $q->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($donnees as $donnee) {
+      switch ($donnee['type'])
       {
         case 'magicien' :
-          $persos[] =  new Magicien($donnees);
-          // var_dump($perso);
-          break;
-        
+         array_push ($persos, new Magicien($donnee));
+        break;
+
         case 'guerrier' :
-          $persos[] = new Guerrier($donnees);
-          break;
+        array_push ($persos, new Guerrier($donnee));
+        break;
 
         case 'archer' :
-          $persos[] = new Archer($donnees);
-          break;
-        
+        array_push ($persos, new Archer($donnee));
+        break;
+
       }
-      return $persos;
-      // var_dump($persos);
-      
     }
+    return $persos;
+
   }
   public function update(Personnage $perso, $strength = 0)
   {
@@ -144,7 +136,7 @@ class PersonnagesManager
     }
     $q = $this->db->prepare('UPDATE personnages SET degats = :degats, niveau = :niveau, experience = :experience, strength = :strength WHERE id = :id');
     
-    $q->bindValue(':degats', $perso->degats() + $strength, PDO::PARAM_INT);
+    $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
     $q->bindValue(':id', $perso->id(), PDO::PARAM_INT);
     $q->bindValue(':niveau', $perso->niveau(), PDO::PARAM_INT);
     $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);

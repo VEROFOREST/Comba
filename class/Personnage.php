@@ -2,15 +2,15 @@
 
 include "./config/autoload.php";
 
-class Personnage
+abstract class Personnage
 {
   protected $degats,
             $id,
             $nom,
             $niveau,
             $experience,
-            $strength,
-            $type;
+            $strength;
+           
             
   
   const CEST_MOI = 1; // Constante renvoyée par la méthode `frapper` si on se frappe soi-même.
@@ -21,21 +21,11 @@ class Personnage
   public function __construct(array $donnees)
   {
     $this->hydrate($donnees);
-    $this->type = strtolower(static::class);
+    // $this->type = strtolower(static::class);
   }
   
-  public function frapper(Personnage $perso)
-  {
-    if($perso->id() == $this->id)
-    {
-      return self::CEST_MOI;
-    }
-    // $force = $this->strength();
-    $this->experience += 25;
-    // On indique au personnage qu'il doit recevoir des dégâts.
-    // Puis on retourne la valeur renvoyée par la méthode : self::PERSONNAGE_TUE ou self::PERSONNAGE_FRAPPE
-    return $perso->recevoirDegats();
-  }
+  abstract public function frapper(Personnage $persoCible);
+ 
   
   public function hydrate(array $donnees)
   {
@@ -50,19 +40,7 @@ class Personnage
     }
   }
   
-  public function recevoirDegats()
-  {
-    $this->degats += 5;
-    
-    // Si on a 100 de dégâts ou plus, on dit que le personnage a été tué.
-    if($this->degats >= 100)
-    {
-      return self::PERSONNAGE_TUE;
-    }
-    
-    // Sinon, on se contente de dire que le personnage a bien été frappé.
-    return self::PERSONNAGE_FRAPPE;
-  }
+  abstract public function recevoirDegats($attaquantforce,$attaquanttype);
   
   
   // GETTERS //
@@ -92,10 +70,7 @@ class Personnage
   {
     return $this->strength;
   }
-  public function type()
-  {
-    return $this->type;
-  }
+  
   
   
   public function setDegats($degats)

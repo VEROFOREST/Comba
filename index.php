@@ -54,6 +54,7 @@
       <legend>Mes informations</legend>
       <p>
         Nom : <?= htmlspecialchars($perso->nom()) ?><br />
+        
         Dégâts : <?= $perso->degats() ?><br />
         niveau : <?= $perso->niveau() ?><br />
         experience : <?= $perso->experience() ?><br />
@@ -67,14 +68,12 @@
       <div class="container">
         <?php
           $persos = $manager->getList($perso->nom());
-          var_dump($persos);
+          // var_dump($persos);
           if (empty($persos)) {
             echo 'Personne à frapper !';
           } 
           else {?>
-            
-
-            <?php foreach ($persos as $unPerso){?>
+              <?php foreach ($persos as $unPerso){?>
               
 
               <?php switch ($unPerso->type()) 

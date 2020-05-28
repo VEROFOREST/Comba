@@ -2,8 +2,8 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost
--- Généré le : mar. 26 mai 2020 à 14:49
+-- Hôte : localhost:3306
+-- Généré le : jeu. 28 mai 2020 à 18:26
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.2.19
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `minijeu`
 --
-CREATE DATABASE IF NOT EXISTS `minijeu` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `minijeu`;
 
 -- --------------------------------------------------------
 
@@ -33,26 +31,22 @@ CREATE TABLE `personnages` (
   `id` smallint(5) UNSIGNED NOT NULL,
   `nom` varchar(50) NOT NULL,
   `degats` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
-  `xp` int(11) NOT NULL DEFAULT '0',
-  `level` int(11) NOT NULL DEFAULT '0',
-  `strength` int(11) NOT NULL DEFAULT '0'
+  `experience` int(11) NOT NULL DEFAULT '0',
+  `niveau` int(11) NOT NULL DEFAULT '0',
+  `strength` int(11) NOT NULL DEFAULT '0',
+  `type` enum('guerrier','archer','magicien') NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `personnages`
 --
 
-INSERT INTO `personnages` (`id`, `nom`, `degats`, `xp`, `level`, `strength`) VALUES
-(25, 'aaaaaa', 0, 25, 6, 6),
-(10, 'GÃ©rard', 80, 0, 0, 0),
-(5, 'Robert', 95, 0, 0, 0),
-(7, 'Jacqueline', 80, 0, 0, 0),
-(8, 'Monique', 65, 0, 0, 0),
-(11, 'Sangoku', 80, 0, 0, 0),
-(13, 'test', 31, 50, 1, 1),
-(21, 'rrrr', 16, 0, 0, 0),
-(20, 'eee', 36, 0, 0, 0),
-(24, 'TOTO', 55, 550, 6, 6);
+INSERT INTO `personnages` (`id`, `nom`, `degats`, `experience`, `niveau`, `strength`, `type`) VALUES
+(46, 'roger', 40, 25, 0, 0, 'archer'),
+(45, 'harrypotter', 20, 0, 0, 0, 'magicien'),
+(44, 'truc', 47, 0, 0, 0, 'magicien'),
+(42, 'forest', 15, 75, 1, 1, 'guerrier'),
+(43, 'bidule', 50, 0, 0, 0, 'magicien');
 
 --
 -- Index pour les tables déchargées
@@ -73,7 +67,7 @@ ALTER TABLE `personnages`
 -- AUTO_INCREMENT pour la table `personnages`
 --
 ALTER TABLE `personnages`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
