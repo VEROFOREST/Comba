@@ -9,7 +9,8 @@ class Personnage
             $nom,
             $niveau,
             $experience,
-            $strength;
+            $strength,
+            $type;
             
   
   const CEST_MOI = 1; // Constante renvoyée par la méthode `frapper` si on se frappe soi-même.
@@ -91,7 +92,10 @@ class Personnage
   {
     return $this->strength;
   }
-  
+  public function type()
+  {
+    return $this->type;
+  }
   
   
   public function setDegats($degats)

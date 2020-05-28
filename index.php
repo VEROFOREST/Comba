@@ -67,16 +67,36 @@
       <div class="container">
         <?php
           $persos = $manager->getList($perso->nom());
+          var_dump($persos);
           if (empty($persos)) {
             echo 'Personne à frapper !';
           } 
           else {?>
+            
 
-            <?php foreach ($persos as $unPerso):?>
-              <div class="card" style="width:18 rem;">
+            <?php foreach ($persos as $unPerso){?>
+              
+
+              <?php switch ($unPerso->type()) 
+              {
+                case 'guerrier':
+                $color = "bg-danger";
+                break;
+                
+                case 'archer':
+                $color = "bg-success";
+                break;
+                case 'magicien':
+                $color = "bg-primary";
+                break;
+                
+              }?> 
+              
+              <div class="card <?=$color?>" style="width:18 rem;">
                  
                   <div class="card-body text-center">
                     <h5 class="card-title"><?=htmlspecialchars($unPerso->nom())?></h5>
+                    <h6 class="card-subtitle"><?=$unPerso->type()?></h6>
                     <p class="card-text">
                       <ul>
                         <li>Degats: <?=$unPerso->degats()?></li>
@@ -88,7 +108,7 @@
                     <a href="?frapper=<?=$unPerso->id()?>" class="btn btn-secondary">FRAPPER</a>
                   </div>
               </div>
-            <?php endforeach;?>
+            <?php }?>
               
            <?php } ?>
       </div>

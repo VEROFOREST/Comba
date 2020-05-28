@@ -60,15 +60,47 @@ class PersonnagesManager
     {
       $q = $this->db->query('SELECT id, nom, degats, niveau, experience, strength, type FROM personnages WHERE id = '.$info);
       $donnees = $q->fetch(PDO::FETCH_ASSOC);
+      switch ($donnees['type'])
+      {
+        case 'magicien' :
+          return new Magicien($donnees);
+          // var_dump($perso);
+          break;
+        
+        case 'guerrier' :
+          return new Guerrier($donnees);
+          break;
+
+        case 'archer' :
+          return new Archer($donnees);
+          break;
+        
+        
+      }
       
-      return new Personnage($donnees);
     }
     else
     {
       $q = $this->db->prepare('SELECT id, nom, degats, niveau, experience, strength, type FROM personnages WHERE nom = :nom');
       $q->execute([':nom' => $info]);
-    
-      return new Personnage($q->fetch(PDO::FETCH_ASSOC));
+      $donnees = $q->fetch(PDO::FETCH_ASSOC);
+      switch ($donnees['type'])
+      {
+        case 'magicien' :
+        return new Magicien($donnees);
+          // var_dump($perso);
+          break;
+        
+        case 'guerrier' :
+          return new Guerrier($donnees);
+          break;
+
+        case 'archer' :
+          return new Archer($donnees);
+          break;
+      
+      }
+      
     }
   }
   
@@ -76,17 +108,33 @@ class PersonnagesManager
   {
     $persos = [];
     
-    $q = $this->db->prepare('SELECT id, nom, degats, niveau, experience, strength,type FROM personnages WHERE nom <> :nom ORDER BY nom');
+    $q = $this->db->prepare('SELECT id, nom, degats, niveau, experience, strength, type FROM personnages WHERE nom <> :nom ORDER BY nom');
     $q->execute([':nom' => $nom]);
     
     while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    // var_dump($donnees);
     {
-      $persos[] = new Personnage($donnees);
+        switch ($donnees['type'])
+      {
+        case 'magicien' :
+          $persos[] =  new Magicien($donnees);
+          // var_dump($perso);
+          break;
+        
+        case 'guerrier' :
+          $persos[] = new Guerrier($donnees);
+          break;
+
+        case 'archer' :
+          $persos[] = new Archer($donnees);
+          break;
+        
+      }
+      return $persos;
+      // var_dump($persos);
+      
     }
-    
-    return $persos;
   }
-  
   public function update(Personnage $perso, $strength = 0)
   {
     if($perso->experience() >= 100){
